@@ -1,0 +1,7 @@
+{
+  "name": "Key-Seller Marketing Consultancy",
+  "description": "A comprehensive platform for motor vehicle sourcing, property investment, professional financing solutions, and high-impact marketing growth.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
