@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -20,9 +19,9 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Top micro bar - Matching user's screenshot */}
-      <div className="bg-corporate-blue text-white py-2.5 px-4 text-xs md:text-sm border-b border-blue-900/50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+      {/* Top micro bar - Exact match for brand colors and requested CTAs */}
+      <div className="bg-corporate-blue text-white py-2 px-4 text-xs md:text-sm border-b border-blue-900/50">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center space-x-6">
             <span className="font-bold opacity-90 uppercase tracking-tight text-[10px]">KEY-SELLER MARKETING CONSULTANCY</span>
             <a href="tel:+254711870805" className="flex items-center hover:text-yellow-500 transition-colors font-bold">
@@ -54,23 +53,29 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center group">
-              <div className="h-14 w-14 mr-3 bg-corporate-blue rounded-full flex items-center justify-center p-1 overflow-hidden shadow-lg border border-blue-900/50">
+              <div className="h-14 w-14 mr-3 bg-corporate-blue rounded-full flex items-center justify-center p-0.5 overflow-hidden shadow-md border border-blue-900/20">
                 <img 
-                  src="public/img.jpg" 
+                  src="/img.jpg" 
                   alt="Logo" 
-                  className="h-full w-full object-contain brightness-150"
+                  className="h-full w-full object-cover"
                   onError={(e) => {
-                     const parent = (e.target as HTMLImageElement).parentElement;
+                     const target = e.target as HTMLImageElement;
+                     target.style.display = 'none';
+                     const parent = target.parentElement;
                      if (parent) {
-                       // Fix the key icon SVG path and complete the innerHTML update
-                       parent.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="w-10 h-10 text-yellow-400" xmlns="http://www.w3.org/2000/svg"><path d="M15 6C13.3431 6 12 7.34315 12 9C12 9.44425 12.0965 9.8659 12.2689 10.2449L3 19.5138V22H5.48622L6.37244 21.1138V19.3404H8.14583L9.03205 18.4542V16.6808H10.8054L11.7551 15.7311C12.1341 15.9035 12.5558 16 13 16C14.6569 16 16 14.6569 16 13C16 12.5558 15.9035 12.1341 15.7311 11.7551L18.2449 9.24122C18.6239 9.41824 19.0456 9.51474 19.4897 9.51474C21.1466 9.51474 22.4897 8.17159 22.4897 6.51474C22.4897 4.85788 21.1466 3.51474 19.4897 3.51474C17.8328 3.51474 16.4897 4.85788 16.4897 6.51474C16.4897 6.95889 16.5862 7.38054 16.7586 7.75952L15 9.51812L15 6Z" fill="currentColor"/></svg>';
+                       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                       svg.setAttribute("viewBox", "0 0 24 24");
+                       svg.setAttribute("fill", "none");
+                       svg.setAttribute("class", "w-8 h-8 text-white");
+                       svg.innerHTML = '<path d="M15 6C13.3431 6 12 7.34315 12 9C12 9.44425 12.0965 9.8659 12.2689 10.2449L3 19.5138V22H5.48622L6.37244 21.1138V19.3404H8.14583L9.03205 18.4542V16.6808H10.8054L11.7551 15.7311C12.1341 15.9035 12.5558 16 13 16C14.6569 16 16 14.6569 16 13C16 12.5558 15.9035 12.1341 15.7311 11.7551L18.2449 9.24122C18.6239 9.41824 19.0456 9.51474 19.4897 9.51474C21.1466 9.51474 22.4897 8.17159 22.4897 6.51474C22.4897 4.85788 21.1466 3.51474 19.4897 3.51474C17.8328 3.51474 16.4897 4.85788 16.4897 6.51474C16.4897 6.95889 16.5862 7.38054 16.7586 7.75952L15 9.51812L15 6Z" fill="currentColor"/>';
+                       parent.appendChild(svg);
                      }
                   }}
                 />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black text-gray-900 tracking-tighter leading-none">KEY-SELLER</span>
-                <span className="text-[9px] text-corporate-blue font-bold tracking-[0.2em] uppercase">Consultancy</span>
+                <span className="text-[9px] text-gray-400 font-bold tracking-[0.2em] uppercase">Marketing Consultancy</span>
               </div>
             </Link>
           </div>
@@ -83,13 +88,21 @@ const Navbar: React.FC = () => {
                 to={link.path}
                 className={`px-4 py-2 rounded-md text-xs font-bold uppercase tracking-widest transition-all ${
                   isActive(link.path)
-                    ? 'text-corporate-blue'
+                    ? 'text-corporate-blue border-b-2 border-corporate-blue'
                     : 'text-gray-500 hover:text-corporate-blue'
                 }`}
               >
                 {link.name}
               </Link>
             ))}
+            <div className="ml-4">
+              <Link
+                to="/contact"
+                className="bg-corporate-blue text-white px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-blue-900 transition-all shadow-md"
+              >
+                Get Started
+              </Link>
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -98,7 +111,6 @@ const Navbar: React.FC = () => {
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
             >
-              <span className="sr-only">Open main menu</span>
               {!isOpen ? (
                 <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -130,13 +142,13 @@ const Navbar: React.FC = () => {
               {link.name}
             </Link>
           ))}
-          <div className="pt-4 pb-2 px-4">
+          <div className="pt-4 pb-2 px-4 space-y-3">
              <Link 
                to="/contact"
                onClick={() => setIsOpen(false)}
                className="block w-full text-center bg-corporate-blue text-white py-3 rounded-xl font-bold uppercase tracking-widest text-xs"
              >
-               Contact Us
+               Get Started
              </Link>
           </div>
         </div>

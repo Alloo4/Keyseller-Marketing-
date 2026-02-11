@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,13 +9,18 @@ const Footer: React.FC = () => {
           {/* Column 1: Brand & Logo */}
           <div className="space-y-6">
             <Link to="/" className="inline-block group">
-              <div className="h-24 w-24 mb-6 bg-gray-900 rounded-2xl flex items-center justify-center p-2 shadow-2xl border border-gray-800">
+              <div className="h-20 w-20 mb-6 bg-white rounded-2xl flex items-center justify-center p-0.5 shadow-2xl overflow-hidden border border-gray-800">
                 <img 
-                  src="https://i.ibb.co/vzP609v/keyseller-logo.png" 
+                  src="/img.jpg" 
                   alt="Key-Seller Logo" 
-                  className="h-full w-full object-contain brightness-150"
+                  className="h-full w-full object-cover"
                   onError={(e) => {
-                     (e.target as HTMLImageElement).src = 'https://cdn-icons-png.flaticon.com/512/32/32339.png'; // Fallback
+                     const target = e.target as HTMLImageElement;
+                     target.style.display = 'none';
+                     const parent = target.parentElement;
+                     if (parent) {
+                       parent.innerHTML = '<span class="text-gray-900 font-black text-xl">KS</span>';
+                     }
                   }}
                 />
               </div>
@@ -89,11 +93,6 @@ const Footer: React.FC = () => {
                 Subscribe
               </button>
             </form>
-            <div className="mt-10 flex space-x-6">
-               <div className="w-10 h-10 bg-gray-900 border border-gray-800 rounded-xl flex items-center justify-center text-gray-600 hover:text-white transition-colors cursor-pointer">F</div>
-               <div className="w-10 h-10 bg-gray-900 border border-gray-800 rounded-xl flex items-center justify-center text-gray-600 hover:text-white transition-colors cursor-pointer">I</div>
-               <div className="w-10 h-10 bg-gray-900 border border-gray-800 rounded-xl flex items-center justify-center text-gray-600 hover:text-white transition-colors cursor-pointer">L</div>
-            </div>
           </div>
         </div>
 
@@ -102,7 +101,6 @@ const Footer: React.FC = () => {
           <div className="mt-4 md:mt-0 flex space-x-8">
             <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
             <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Compliance</span>
           </div>
         </div>
       </div>
