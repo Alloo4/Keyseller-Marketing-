@@ -1,7 +1,10 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <footer className="bg-gray-950 text-white pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -10,19 +13,16 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <Link to="/" className="inline-block group">
               <div className="h-20 w-20 mb-6 bg-white rounded-2xl flex items-center justify-center p-0.5 shadow-2xl overflow-hidden border border-gray-800">
-                <img 
-                  src="/img.jpg" 
-                  alt="Key-Seller Logo" 
-                  className="h-full w-full object-cover"
-                  onError={(e) => {
-                     const target = e.target as HTMLImageElement;
-                     target.style.display = 'none';
-                     const parent = target.parentElement;
-                     if (parent) {
-                       parent.innerHTML = '<span class="text-gray-900 font-black text-xl">KS</span>';
-                     }
-                  }}
-                />
+                {!imgError ? (
+                  <img 
+                    src="/img.jpg" 
+                    alt="Key-Seller Logo" 
+                    className="h-full w-full object-cover"
+                    onError={() => setImgError(true)}
+                  />
+                ) : (
+                  <span className="text-gray-900 font-black text-2xl">KS</span>
+                )}
               </div>
               <div className="border-l-4 border-corporate-blue pl-4">
                 <h3 className="text-2xl font-black tracking-tighter leading-tight">KEY-SELLER</h3>
