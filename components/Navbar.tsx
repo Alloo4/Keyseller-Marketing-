@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
             <Link to="/" className="flex-shrink-0 flex items-center group">
               <div className="h-14 w-14 mr-3 bg-corporate-blue rounded-full flex items-center justify-center p-1 overflow-hidden shadow-lg border border-blue-900/50">
                 <img 
-                  src="https://i.ibb.co/vzP609v/keyseller-logo.png" 
+                  src="public/img.jpg" 
                   alt="Logo" 
                   className="h-full w-full object-contain brightness-150"
                   onError={(e) => {
