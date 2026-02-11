@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
               <div className="h-14 w-14 mr-3 bg-corporate-blue rounded-full flex items-center justify-center p-0.5 overflow-hidden shadow-md border border-blue-900/20">
                 {!imgError ? (
                   <img 
-                    src="/img.jpg" 
+                    src="/logo.jpg" 
                     alt="Key-Seller Logo" 
                     className="h-full w-full object-cover"
                     onError={() => setImgError(true)}
