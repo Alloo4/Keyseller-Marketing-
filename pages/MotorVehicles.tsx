@@ -37,11 +37,11 @@ const MotorVehicles: React.FC = () => {
            <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1920" className="w-full h-full object-cover" alt="Car" />
         </div>
         <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-6">Buy. Sell. Upgrade—confidently.</h1>
+          <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 tracking-tight">Buy. Sell. Upgrade—confidently.</h1>
           <p className="text-xl max-w-3xl mx-auto mb-10 opacity-90">
             Access resale-ready vehicles and auction units sourced through trusted channels, with guidance on inspections, documentation, and financing options.
           </p>
-          <a href="#listings" className="bg-corporate-blue text-white px-8 py-4 rounded-md font-bold hover:bg-blue-800 transition-all inline-block">
+          <a href="#listings" className="bg-corporate-blue text-white px-8 py-4 rounded-md font-bold hover:bg-blue-800 transition-all inline-block shadow-lg">
             View Current Inventory
           </a>
         </div>
@@ -49,13 +49,13 @@ const MotorVehicles: React.FC = () => {
 
       {/* Partners Strip */}
       <section className="py-12 bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-8">Trusted by Banking & Insurance Partners</p>
-          <div className="flex flex-wrap justify-center items-center gap-12 opacity-60">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center text-sm font-semibold text-gray-400 uppercase tracking-widest mb-10">Our Financing & Asset Partners</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 items-center">
             {partners.map((p, i) => (
-              <div key={i} className="flex flex-col items-center">
-                <img src={p.logo} alt={p.name} className="h-8 mb-2 grayscale" />
-                <span className="text-xs font-bold text-gray-500">{p.name}</span>
+              <div key={i} className="flex flex-col items-center justify-center p-4 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100">
+                <img src={p.logo} alt={p.name} className="h-10 mb-2" />
+                <span className="text-xs font-bold text-gray-500 uppercase">{p.name}</span>
               </div>
             ))}
           </div>
@@ -65,14 +65,14 @@ const MotorVehicles: React.FC = () => {
       {/* Listings Section */}
       <section id="listings" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 md:mb-0">Explore Our Units</h2>
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 md:mb-0">Explore Available Vehicles</h2>
             <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
               {['all', 'auction', 'new', 'resale'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 rounded-md text-sm font-semibold transition-all capitalize ${
+                  className={`px-6 py-2 rounded-md text-sm font-bold transition-all capitalize ${
                     activeTab === tab ? 'bg-corporate-blue text-white shadow-md' : 'text-gray-500 hover:text-corporate-blue'
                   }`}
                 >
@@ -82,32 +82,34 @@ const MotorVehicles: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {filteredListings.map((car) => (
-              <div key={car.id} className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="relative h-56 overflow-hidden">
-                  <img src={car.img} alt={car.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase shadow-sm ${
-                    car.category === 'auction' ? 'bg-red-600 text-white' : car.category === 'new' ? 'bg-green-600 text-white' : 'bg-corporate-blue text-white'
+              <div key={car.id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="relative h-60 overflow-hidden">
+                  <img src={car.img} alt={car.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className={`absolute top-4 left-4 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md ${
+                    car.category === 'auction' ? 'bg-red-600 text-white' : car.category === 'new' ? 'bg-emerald-600 text-white' : 'bg-corporate-blue text-white'
                   }`}>
                     {car.type}
-                  </span>
+                  </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{car.title}</h3>
-                  <p className="text-2xl font-extrabold text-corporate-blue mb-4">{car.price}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-6 pb-4 border-b">
-                    <span className="flex items-center">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zM12 4a8 8 0 100 16 8 8 0 000-16z" /></svg>
+                <div className="p-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-corporate-blue transition-colors">{car.title}</h3>
+                  <p className="text-2xl font-black text-corporate-blue mb-6">{car.price}</p>
+                  
+                  <div className="flex items-center justify-between text-xs text-gray-500 mb-8 pt-4 border-t border-gray-50">
+                    <span className="flex items-center font-semibold">
+                      <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zM12 4a8 8 0 100 16 8 8 0 000-16z" /></svg>
                       {car.carType}
                     </span>
-                    <span className="flex items-center">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                    <span className="flex items-center font-semibold">
+                      <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
                       {car.location}
                     </span>
                   </div>
-                  <Link to="/contact" className="block w-full text-center bg-gray-900 text-white py-3 rounded-md font-bold hover:bg-corporate-blue transition-colors">
-                    Inquire Now
+                  
+                  <Link to="/contact" className="block w-full text-center bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-corporate-blue transition-all active:scale-95 shadow-md">
+                    Inquire for Details
                   </Link>
                 </div>
               </div>
@@ -117,19 +119,19 @@ const MotorVehicles: React.FC = () => {
       </section>
 
       {/* Offerings Snapshot */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">Why Buy From Us?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <h2 className="text-3xl font-bold text-center mb-16">Why Secure Your Vehicle with Us?</h2>
+          <div className="grid md:grid-cols-3 gap-10">
             {[
-              { title: "Vetted Units", desc: "Every car undergoes a thorough inspection before listing.", icon: "✅" },
-              { title: "Ready Logbooks", desc: "No delays in transfer; we ensure all documentation is ready.", icon: "📄" },
-              { title: "Financing Support", desc: "Quick matching to the right asset financing facility.", icon: "💰" }
+              { title: "Vetted Units", desc: "Every vehicle undergoes a professional inspection before being listed for sale or auction.", icon: "🛡️" },
+              { title: "Ready Documents", desc: "We ensure all ownership documents are verified and ready for a smooth title transfer process.", icon: "📄" },
+              { title: "Financing Support", desc: "We directly match you to the most suitable asset financing facility based on your profile.", icon: "💳" }
             ].map((item, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold mb-4">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+              <div key={idx} className="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                <div className="text-5xl mb-6">{item.icon}</div>
+                <h3 className="text-xl font-bold mb-4 text-gray-900">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -137,19 +139,25 @@ const MotorVehicles: React.FC = () => {
       </section>
 
       {/* FAQs */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Common questions (FAQ)</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Common Questions</h2>
+            <p className="text-gray-500">Everything you need to know about our vehicle sourcing process.</p>
+          </div>
           <Accordion items={faqs} />
         </div>
       </section>
 
       {/* CTA */}
-      <section className="bg-corporate-blue py-16 text-center text-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-2xl lg:text-3xl font-bold mb-8">Want to finance your next car?</h2>
-          <Link to="/financing" className="bg-white text-corporate-blue px-10 py-4 rounded-md font-bold hover:bg-gray-100 transition-colors">
-            Check Financing Options
+      <section className="bg-corporate-blue py-20 text-center text-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+          <div className="absolute top-[-50%] left-[-10%] w-[120%] h-[200%] bg-[radial-gradient(circle,white_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        </div>
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-8 tracking-tight">Ready to finance your next vehicle?</h2>
+          <Link to="/financing" className="bg-white text-corporate-blue px-12 py-5 rounded-xl font-black hover:bg-gray-100 transition-all inline-block shadow-2xl active:scale-95">
+            Check My Financing Options
           </Link>
         </div>
       </section>
