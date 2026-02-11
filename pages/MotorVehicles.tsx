@@ -3,135 +3,303 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Accordion from '../components/Accordion';
 
+interface VehicleImage {
+  url: string;
+  alt: string;
+}
+
+interface Vehicle {
+  id: number;
+  make: string;
+  yom: string;
+  fuel: string;
+  regNo: string;
+  price: string;
+  location: string;
+  status: string;
+  category: 'auction' | 'resale' | 'new';
+  images: VehicleImage[];
+}
+
+const VehicleCard: React.FC<{ vehicle: Vehicle }> = ({ vehicle }) => {
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
+  const nextImg = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setCurrentImgIndex((prev) => (prev + 1) % vehicle.images.length);
+  };
+
+  const prevImg = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setCurrentImgIndex((prev) => (prev - 1 + vehicle.images.length) % vehicle.images.length);
+  };
+
+  return (
+    <div className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300">
+      {/* Multi-Image Gallery */}
+      <div className="relative h-64 overflow-hidden bg-gray-100">
+        <img 
+          src={vehicle.images[currentImgIndex]?.url} 
+          alt={`${vehicle.make} - Photo ${currentImgIndex + 1}`} 
+          className="w-full h-full object-cover transition-opacity duration-300"
+        />
+        
+        {/* Navigation Arrows */}
+        {vehicle.images.length > 1 && (
+          <>
+            <button 
+              onClick={prevImg}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button 
+              onClick={nextImg}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </>
+        )}
+
+        {/* Counter Badge */}
+        <div className="absolute bottom-3 right-3 bg-black/50 text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-md">
+          {currentImgIndex + 1} / {vehicle.images.length}
+        </div>
+
+        {/* Status Badges */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <span className="bg-red-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-sm shadow-lg">
+            {vehicle.status}
+          </span>
+          <span className="bg-yellow-500 text-gray-900 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-sm shadow-lg">
+            Negotiable
+          </span>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-black text-gray-900 tracking-tight leading-tight uppercase">{vehicle.make}</h3>
+          <span className="text-[10px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded">REG: {vehicle.regNo}</span>
+        </div>
+        
+        <div className="flex gap-4 mb-4">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">YOM</span>
+            <span className="text-sm font-black text-gray-700">{vehicle.yom}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Fuel</span>
+            <span className="text-sm font-black text-gray-700">{vehicle.fuel}</span>
+          </div>
+        </div>
+
+        <p className="text-2xl font-black text-corporate-blue mb-6">Ksh {vehicle.price}</p>
+        
+        <div className="flex items-center text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-6 pb-4 border-b border-gray-50">
+          <svg className="w-4 h-4 mr-2 text-corporate-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+          {vehicle.location}
+        </div>
+        
+        <Link 
+          to="/contact" 
+          className="block w-full text-center bg-corporate-blue text-white py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-blue-900 transition-all shadow-md active:scale-95"
+        >
+          Inquire / Book Viewing
+        </Link>
+      </div>
+    </div>
+  );
+};
+
 const MotorVehicles: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');
 
-  const listings = [
-    { id: 1, type: 'Auction', title: '2018 Toyota Prado TX-L', price: 'Ksh 5,200,000', category: 'auction', carType: 'SUV', location: 'Nairobi', img: 'https://images.unsplash.com/photo-1594568284297-7c64464062b1?auto=format&fit=crop&q=80&w=600' },
-    { id: 2, type: 'New', title: '2024 Suzuki Vitara Hybrid', price: 'Ksh 4,800,000', category: 'new', carType: 'SUV', location: 'Mombasa', img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=600' },
-    { id: 3, type: 'Resale', title: '2016 Mazda CX-5', price: 'Ksh 2,450,000', category: 'resale', carType: 'SUV', location: 'Nairobi', img: 'https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&q=80&w=600' },
-    { id: 4, type: 'Auction', title: '2019 Isuzu NQR Truck', price: 'Ksh 3,100,000', category: 'auction', carType: 'Commercial', location: 'Nakuru', img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=600' },
-    { id: 5, type: 'New', title: '2024 Toyota Land Cruiser 300', price: 'Ksh 22,000,000', category: 'new', carType: 'SUV', location: 'Nairobi', img: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&w=600' },
-    { id: 6, type: 'Resale', title: '2017 Honda Fit Hybrid', price: 'Ksh 1,350,000', category: 'resale', carType: 'Hatchback', location: 'Eldoret', img: 'https://images.unsplash.com/photo-1590362891175-3794ef174605?auto=format&fit=crop&q=80&w=600' },
-  ];
-
-  const partners = [
-    { name: 'NCBA Bank', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Placeholder_logo.svg/100px-Placeholder_logo.svg.png' },
-    { name: 'Stanbic Bank', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Placeholder_logo.svg/100px-Placeholder_logo.svg.png' },
-    { name: 'I&M Bank', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Placeholder_logo.svg/100px-Placeholder_logo.svg.png' },
-    { name: 'Heritage Insurance', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Placeholder_logo.svg/100px-Placeholder_logo.svg.png' },
+  // Real data from user's provided sheets and images
+  const listings: Vehicle[] = [
+    { 
+      id: 1, 
+      make: 'Toyota Landcruiser V6', 
+      yom: '2009', 
+      fuel: 'Petrol', 
+      regNo: 'KDC', 
+      price: '4,500,000', 
+      location: 'Ivory Motors Yard, Langata Road', 
+      status: 'Ready for Auction', 
+      category: 'auction',
+      images: [
+        { url: 'https://i.ibb.co/hR08m5f/lc1.jpg', alt: 'Front View' },
+        { url: 'https://i.ibb.co/K50R6V8/lc2.jpg', alt: 'Interior' }
+      ]
+    },
+    { 
+      id: 2, 
+      make: 'BMW X5', 
+      yom: '2012', 
+      fuel: 'Diesel', 
+      regNo: 'KCQ', 
+      price: '1,600,000', 
+      location: 'Greypost Yard, Kiambu Road', 
+      status: 'Ready for Auction', 
+      category: 'auction',
+      images: [
+        { url: 'https://i.ibb.co/2Z5pCtf/bmw1.jpg', alt: 'Front' },
+        { url: 'https://i.ibb.co/6P0L8yv/bmw2.jpg', alt: 'Rear' },
+        { url: 'https://i.ibb.co/Xz9t0h4/bmw3.jpg', alt: 'Side' }
+      ]
+    },
+    { 
+      id: 3, 
+      make: 'Mitsubishi Lorry (Canter)', 
+      yom: '2014', 
+      fuel: 'Diesel', 
+      regNo: 'KCE', 
+      price: '1,000,000', 
+      location: 'Ivory Motors Yard, Langata Road', 
+      status: 'Ready for Auction', 
+      category: 'auction',
+      images: [
+        { url: 'https://i.ibb.co/0VvjG6r/canter1.jpg', alt: 'Front' },
+        { url: 'https://i.ibb.co/GWh3tB1/canter2.jpg', alt: 'Side' },
+        { url: 'https://i.ibb.co/yN0k59q/canter3.jpg', alt: 'Cargo Bed' }
+      ]
+    },
+    { 
+      id: 4, 
+      make: 'Mitsubishi L200', 
+      yom: '2010', 
+      fuel: 'Diesel', 
+      regNo: 'KDH', 
+      price: '910,000', 
+      location: 'Startruck Yard, Kiambu Road', 
+      status: 'Ready for Auction', 
+      category: 'auction',
+      images: [
+        { url: 'https://i.ibb.co/C0W2h2Z/l200-1.jpg', alt: 'Front' },
+        { url: 'https://i.ibb.co/3s8xV8R/l200-2.jpg', alt: 'Rear' }
+      ]
+    },
+    { 
+      id: 5, 
+      make: 'Toyota Harrier', 
+      yom: '2000', 
+      fuel: 'Petrol', 
+      regNo: 'KAX', 
+      price: '400,000', 
+      location: 'Greypost Yard, Kiambu Road', 
+      status: 'Ready for Auction', 
+      category: 'auction',
+      images: [
+        { url: 'https://i.ibb.co/D8m3T5P/harrier1.jpg', alt: 'Front' },
+        { url: 'https://i.ibb.co/YyYfG7K/harrier2.jpg', alt: 'Rear' }
+      ]
+    },
+    { 
+      id: 6, 
+      make: 'Volkswagen Passat', 
+      yom: '1999', 
+      fuel: 'Petrol', 
+      regNo: 'KAV', 
+      price: '350,000', 
+      location: 'Startruck Yard, Kiambu Road', 
+      status: 'Ready for Auction', 
+      category: 'auction',
+      images: [
+        { url: 'https://i.ibb.co/9V6WvF8/passat1.jpg', alt: 'Front' },
+        { url: 'https://i.ibb.co/0V3z9Gv/passat2.jpg', alt: 'Rear' }
+      ]
+    }
   ];
 
   const filteredListings = activeTab === 'all' ? listings : listings.filter(item => item.category === activeTab);
 
   const faqs = [
-    { title: "Are auction vehicles risky?", content: "We encourage inspection where available and reference documents like valuation reports to reduce surprises. Transparency is our core value." },
-    { title: "How fast can I secure funds?", content: "Some partner products can be processed quickly depending on eligibility and documents. We guide you on everything needed for a fast approval." }
+    { title: "Can I inspect the vehicles before auction?", content: "Yes, we encourage all buyers to visit the specific yard (Ivory Motors, Greypost, or Startruck) during viewing hours. Contact us for the viewing schedule." },
+    { title: "How does the auction process work?", content: "Our team facilitates the connection to the bidding platform. You'll need to provide your ID, KRA PIN, and sometimes a refundable deposit depending on the partner yard's terms." },
+    { title: "Is financing available for auction cars?", content: "Yes, we offer asset financing solutions. For auction units, pre-approval is recommended so you can bid with confidence." }
   ];
 
   return (
     <div className="bg-white">
       {/* Hero */}
-      <header className="bg-gray-900 py-20 lg:py-32 relative text-white">
+      <header className="bg-gray-900 py-24 lg:py-32 relative text-white">
         <div className="absolute inset-0 opacity-40">
-           <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1920" className="w-full h-full object-cover" alt="Car" />
+           <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1920" className="w-full h-full object-cover" alt="Auction Cars" />
         </div>
         <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 tracking-tight">Buy. Sell. Upgrade—confidently.</h1>
-          <p className="text-xl max-w-3xl mx-auto mb-10 opacity-90">
-            Access resale-ready vehicles and auction units sourced through trusted channels, with guidance on inspections, documentation, and financing options.
+          <div className="inline-block bg-corporate-blue text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-md mb-8 shadow-xl">
+            Live Auction Opportunities
+          </div>
+          <h1 className="text-4xl lg:text-6xl font-black mb-6 tracking-tighter uppercase leading-none">Verified Vehicle <br/> Auction Portfolio</h1>
+          <p className="text-xl max-w-2xl mx-auto mb-12 font-medium opacity-80">
+            Secure prime motor assets at competitive prices. Every unit in our portfolio is sourced from verified partner yards with ready documentation.
           </p>
-          <a href="#listings" className="bg-corporate-blue text-white px-8 py-4 rounded-md font-bold hover:bg-blue-800 transition-all inline-block shadow-lg">
-            View Current Inventory
-          </a>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#listings" className="bg-white text-gray-900 px-10 py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-gray-100 transition-all shadow-xl">
+              Browse Listings
+            </a>
+            <Link to="/contact" className="bg-corporate-blue text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-blue-800 transition-all shadow-xl">
+              Request Catalogue
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Partners Strip */}
-      <section className="py-12 bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-center text-sm font-semibold text-gray-400 uppercase tracking-widest mb-10">Our Financing & Asset Partners</p>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 items-center">
-            {partners.map((p, i) => (
-              <div key={i} className="flex flex-col items-center justify-center p-4 grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100">
-                <img src={p.logo} alt={p.name} className="h-10 mb-2" />
-                <span className="text-xs font-bold text-gray-500 uppercase">{p.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Listings Section */}
-      <section id="listings" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 md:mb-0">Explore Available Vehicles</h2>
-            <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
-              {['all', 'auction', 'new', 'resale'].map((tab) => (
+      <section id="listings" className="py-24 bg-gray-50">
+        <div className="max-w-[1440px] mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div className="max-w-xl">
+              <h2 className="text-4xl font-black text-[#1a1a1a] tracking-tighter uppercase mb-4 leading-none">Current Inventory</h2>
+              <p className="text-gray-500 font-bold text-sm uppercase tracking-wide">Showing verified units ready for auction and direct resale.</p>
+            </div>
+            <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100">
+              {['all', 'auction', 'resale'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-2 rounded-md text-sm font-bold transition-all capitalize ${
-                    activeTab === tab ? 'bg-corporate-blue text-white shadow-md' : 'text-gray-500 hover:text-corporate-blue'
+                  className={`px-8 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all ${
+                    activeTab === tab ? 'bg-corporate-blue text-white shadow-md' : 'text-gray-400 hover:text-corporate-blue'
                   }`}
                 >
-                  {tab === 'all' ? 'All Units' : `${tab} Units`}
+                  {tab === 'all' ? 'Show All' : `${tab} Units`}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredListings.map((car) => (
-              <div key={car.id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                <div className="relative h-60 overflow-hidden">
-                  <img src={car.img} alt={car.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className={`absolute top-4 left-4 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md ${
-                    car.category === 'auction' ? 'bg-red-600 text-white' : car.category === 'new' ? 'bg-emerald-600 text-white' : 'bg-corporate-blue text-white'
-                  }`}>
-                    {car.type}
-                  </div>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-corporate-blue transition-colors">{car.title}</h3>
-                  <p className="text-2xl font-black text-corporate-blue mb-6">{car.price}</p>
-                  
-                  <div className="flex items-center justify-between text-xs text-gray-500 mb-8 pt-4 border-t border-gray-50">
-                    <span className="flex items-center font-semibold">
-                      <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zM12 4a8 8 0 100 16 8 8 0 000-16z" /></svg>
-                      {car.carType}
-                    </span>
-                    <span className="flex items-center font-semibold">
-                      <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
-                      {car.location}
-                    </span>
-                  </div>
-                  
-                  <Link to="/contact" className="block w-full text-center bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-corporate-blue transition-all active:scale-95 shadow-md">
-                    Inquire for Details
-                  </Link>
-                </div>
-              </div>
+            {filteredListings.map((vehicle) => (
+              <VehicleCard key={vehicle.id} vehicle={vehicle} />
             ))}
+          </div>
+
+          <div className="mt-20 bg-white rounded-3xl p-10 lg:p-16 border border-gray-100 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div className="max-w-2xl">
+              <h3 className="text-3xl font-black text-gray-900 tracking-tighter uppercase mb-4 leading-tight">Can't find the specific model you're looking for?</h3>
+              <p className="text-gray-600 font-medium">We have over 50+ units arriving weekly across various yards in Nairobi and Mombasa. Tell us your requirements and we'll alert you the moment a match arrives.</p>
+            </div>
+            <Link to="/contact" className="bg-corporate-blue text-white px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-blue-900 transition-all shadow-2xl shrink-0">
+              Set Price Alert
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Offerings Snapshot */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">Why Secure Your Vehicle with Us?</h2>
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-3 gap-16">
             {[
-              { title: "Vetted Units", desc: "Every vehicle undergoes a professional inspection before being listed for sale or auction.", icon: "🛡️" },
-              { title: "Ready Documents", desc: "We ensure all ownership documents are verified and ready for a smooth title transfer process.", icon: "📄" },
-              { title: "Financing Support", desc: "We directly match you to the most suitable asset financing facility based on your profile.", icon: "💳" }
+              { title: "Pre-Auction Inspection", desc: "Detailed photos and video walkarounds provided for every unit to help you assess condition remotely.", icon: "🔍" },
+              { title: "Document Verification", desc: "We ensure KRA PIN transfers and ownership documents are cleared by our legal team before the sale.", icon: "✅" },
+              { title: "Direct Yard Access", desc: "Unlike brokers, we give you direct yard addresses and contact persons for genuine viewings.", icon: "📍" }
             ].map((item, idx) => (
-              <div key={idx} className="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
-                <div className="text-5xl mb-6">{item.icon}</div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed text-sm">{item.desc}</p>
+              <div key={idx} className="flex flex-col items-start">
+                <div className="text-4xl mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl">{item.icon}</div>
+                <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter mb-4">{item.title}</h3>
+                <p className="text-gray-500 font-medium leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -139,25 +307,23 @@ const MotorVehicles: React.FC = () => {
       </section>
 
       {/* FAQs */}
-      <section className="py-24">
+      <section className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Common Questions</h2>
-            <p className="text-gray-500">Everything you need to know about our vehicle sourcing process.</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tighter mb-4">Auction Knowledge Base</h2>
+            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Essential information for first-time bidders.</p>
           </div>
           <Accordion items={faqs} />
         </div>
       </section>
 
       {/* CTA */}
-      <section className="bg-corporate-blue py-20 text-center text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute top-[-50%] left-[-10%] w-[120%] h-[200%] bg-[radial-gradient(circle,white_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        </div>
+      <section className="bg-corporate-blue py-24 text-center text-white relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 relative z-10">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-8 tracking-tight">Ready to finance your next vehicle?</h2>
-          <Link to="/financing" className="bg-white text-corporate-blue px-12 py-5 rounded-xl font-black hover:bg-gray-100 transition-all inline-block shadow-2xl active:scale-95">
-            Check My Financing Options
+          <h2 className="text-4xl lg:text-5xl font-black mb-8 tracking-tighter uppercase leading-none">Grow your fleet with <br/> flexible financing</h2>
+          <p className="mb-12 opacity-80 text-lg font-medium">Get up to 70% financing on verified auction and resale units. We handle the paperwork, you focus on the growth.</p>
+          <Link to="/financing" className="bg-white text-corporate-blue px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-100 transition-all inline-block shadow-2xl active:scale-95">
+            Check Financing Eligibility
           </Link>
         </div>
       </section>
