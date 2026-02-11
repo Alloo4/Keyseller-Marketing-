@@ -48,7 +48,7 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-bold text-gray-900">Phone / WhatsApp</h4>
-                <p className="text-gray-600">+254 7XX XXX XXX</p>
+                <p className="text-gray-600">(+254) 711 870 805</p>
               </div>
             </div>
             <div className="flex items-start space-x-4">
