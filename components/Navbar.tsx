@@ -20,8 +20,8 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Top micro bar - Matching user's screenshot */}
-      <div className="bg-corporate-blue text-white py-2.5 px-4">
+      {/* Top micro bar - Corporate Blue */}
+      <div className="bg-[#003366] text-white py-2.5 px-4">
         <div className="max-w-[1440px] mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-6">
             <span className="text-[11px] font-bold tracking-tight">KEY-SELLER MARKETING CONSULTANCY</span>
@@ -37,13 +37,13 @@ const Navbar: React.FC = () => {
                href="https://wa.me/254711870805" 
                target="_blank" 
                rel="noopener noreferrer"
-               className="bg-[#1bd75e] hover:bg-[#16ae4b] text-[10px] font-black uppercase px-4 py-2 rounded-sm tracking-wider transition-all"
+               className="bg-[#2ecc71] hover:bg-[#27ae60] text-[10px] font-black uppercase px-4 py-2 rounded-sm tracking-wider transition-all"
              >
                WHATSAPP US
              </a>
              <Link 
                to="/contact" 
-               className="text-[10px] font-black uppercase border border-white/50 px-4 py-2 rounded-sm tracking-wider hover:bg-white hover:text-corporate-blue transition-all"
+               className="text-[10px] font-black uppercase border border-white/50 px-4 py-2 rounded-sm tracking-wider hover:bg-white hover:text-[#003366] transition-all"
              >
                REQUEST CATALOGUE
              </Link>
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <div className="h-12 w-12 mr-3 rounded-full flex items-center justify-center overflow-hidden bg-corporate-blue">
+              <div className="h-14 w-14 mr-3 rounded-full flex items-center justify-center overflow-hidden bg-[#003366]">
                 {!imgError ? (
                   <img 
                     src="/logo.jpg" 
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
                     onError={() => setImgError(true)}
                   />
                 ) : (
-                  <span className="text-white font-black text-sm">KS</span>
+                  <span className="text-white font-black text-lg">KS</span>
                 )}
               </div>
               <div className="flex flex-col">
@@ -83,13 +83,13 @@ const Navbar: React.FC = () => {
                 to={link.path}
                 className={`px-4 py-2 text-[12px] font-bold uppercase tracking-wider transition-all relative ${
                   isActive(link.path)
-                    ? 'text-corporate-blue'
-                    : 'text-gray-500 hover:text-corporate-blue'
+                    ? 'text-[#003366]'
+                    : 'text-gray-500 hover:text-[#003366]'
                 }`}
               >
                 {link.name}
                 {isActive(link.path) && (
-                  <span className="absolute bottom-[-10px] left-4 right-4 h-[3px] bg-corporate-blue rounded-full"></span>
+                  <span className="absolute bottom-[-10px] left-4 right-4 h-[2px] bg-[#003366]"></span>
                 )}
               </Link>
             ))}
@@ -105,10 +105,7 @@ const Navbar: React.FC = () => {
 
           {/* Mobile menu button */}
           <div className="lg:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-600 focus:outline-none"
-            >
+            <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-gray-600">
               {!isOpen ? (
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -124,29 +121,20 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`lg:hidden ${isOpen ? 'block' : 'hidden'} border-t border-gray-100`}>
-        <div className="px-4 pt-2 pb-6 space-y-1 bg-white shadow-xl">
+      <div className={`lg:hidden ${isOpen ? 'block' : 'hidden'} bg-white border-t border-gray-100`}>
+        <div className="px-4 py-6 space-y-1">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
               onClick={() => setIsOpen(false)}
               className={`block px-4 py-4 rounded-md text-[13px] font-bold uppercase tracking-widest ${
-                isActive(link.path) ? 'bg-blue-50 text-corporate-blue' : 'text-gray-600'
+                isActive(link.path) ? 'bg-blue-50 text-[#003366]' : 'text-gray-600'
               }`}
             >
               {link.name}
             </Link>
           ))}
-          <div className="pt-4 px-4">
-             <Link 
-               to="/contact"
-               onClick={() => setIsOpen(false)}
-               className="block w-full text-center bg-corporate-blue text-white py-4 rounded-xl font-bold uppercase tracking-widest text-xs"
-             >
-               Get Started
-             </Link>
-          </div>
         </div>
       </div>
     </nav>
